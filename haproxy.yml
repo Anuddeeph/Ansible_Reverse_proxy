@@ -1,0 +1,48 @@
+#Launch Webserver
+- hosts: Webserver
+  tasks:
+    - name: "Install The Required Packages"
+      package:
+        name:
+          - "httpd"
+          - "php"
+          - "net-tools"
+        state: present
+    - name: "Copying the Content into Webserver" 
+      template:
+        dest: "/var/www/html/index.php"
+        src: "index.php"
+      notify: web
+  handlers:
+    - name: web
+      service:
+        name: "httpd"
+        state: restarted
+        enabled: yes
+# Launch Load Balancer
+- hosts: LoadBalancer
+  tasks:
+    - name: "Installing the HAProxy Software Into LB"
+      package:
+        name: "haproxy"
+        state: present
+    - name: "Copy the haproxy.cfg"
+      template:
+        dest: "/etc/haproxy/haproxy.cfg"
+        src: "haproxy.cfg"
+      notify: lb
+  handlers:
+    - name: lb
+      service:
+        name: "haproxy"
+        state: restarted
+        enabled: yes
+
+
+
+
+      
+
+ 
+  
+   
