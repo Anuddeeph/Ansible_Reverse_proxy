@@ -8,11 +8,16 @@
           - "php"
           - "net-tools"
         state: present
+     - name: "Start Httpd Service"
+        service:
+          name: httpd
+          state: started
+          enabled: yes
     - name: "Copying the Content into Webserver" 
       template:
         dest: "/var/www/html/index.php"
         src: "index.php"
-      notify: web
+      notify: web  
   handlers:
     - name: web
       service:
